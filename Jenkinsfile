@@ -1,6 +1,5 @@
 pipeline {
   agent any
-
   environment {
     // Docker Hub 크리덴셜 ID
     DOCKER_CREDENTIALS = 'by4mon@gmail.com'
@@ -74,7 +73,7 @@ pipeline {
       }
     }
   }
-  
+
   post {
     always {
       cleanWs()
