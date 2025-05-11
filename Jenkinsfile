@@ -54,17 +54,34 @@ pipeline {
     stage('Update Manifests & Push') {
         steps {
             dir(env.MANIFEST_DIR) {
+            // 매니페스트 리포 클론
             git url: env.MANIFEST_REPO,
                 credentialsId: env.GIT_CREDENTIALS,
                 branch: 'main'
-            sh """
-                sed -i 's|image: .*|image: ${IMAGE}:${env.GIT_TAG}|' deployment.yaml
+
+            // image 태그 교체
+            sh "sed -i 's|image: .*|image: ${IMAGE}:${GIT_TAG}|' deployment.yaml"
+
+            // 커밋
+            sh '''
                 git config user.email "ci@example.com"
                 git config user.name  "Jenkins CI"
                 git add deployment.yaml
-                git commit -m "ci: bump image to ${env.GIT_TAG}"
+                git commit -m "ci: bump image to ${GIT_TAG}"
+            '''
+
+            // 여기서 PAT 을 사용해 remote URL 을 재설정한 뒤 push
+            withCredentials([usernamePassword(
+                credentialsId: env.GIT_CREDENTIALS,
+                usernameVariable: 'GIT_USER',
+                passwordVariable: 'GIT_TOKEN'
+            )]) {
+                sh '''
+                # origin URL 을 PAT 가 포함된 형태로 바꿔줍니다.
+                git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/LightYe4r/cicd-pipeline-deploy.git
                 git push origin main
-            """
+                '''
+            }
             }
         }
     }
