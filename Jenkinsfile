@@ -12,6 +12,10 @@ pipeline {
     MANIFEST_REPO      = 'https://github.com/LightYe4r/cicd-pipeline-deploy.git'
     MANIFEST_DIR       = 'deploy-manifests'
   }
+  
+  triggers {
+    githubPush()
+  }
 
   stages {
     stage('Checkout Code') {
