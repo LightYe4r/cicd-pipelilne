@@ -9,7 +9,7 @@ pipeline {
     REGISTRY           = 'docker.io/manji955'
     IMAGE              = "${REGISTRY}/simple-web-app"
     // Git 리포지터리 URL (HTTPS)
-    MANIFEST_REPO      = 'https://github.com/LightYe4r/deploy-manifests.git'
+    MANIFEST_REPO      = 'https://github.com/LightYe4r/cicd-pipelilne.git'
     MANIFEST_DIR       = 'deploy-manifests'
   }
 
